@@ -1,9 +1,17 @@
 flask
 requests
 python-dotenv
-polygon-api-client
-alpha_vantage
-
-# Set your API keys in your .env file:
-# ALPHA_VANTAGE_API_KEY=your_alpha_vantage_key_here
-# POLYGON_API_KEY=your_polygon_key_here
+pandas
+matplotlib
+PyMuPDF
+python-pptx
+reportlab
+beautifulsoup4
+slack_sdk
+apscheduler
+feedparser
+PyPDF2
+tldextract
+google-generativeai
+textblob
+googlesearch-python
