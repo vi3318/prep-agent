@@ -1,0 +1,49 @@
+# Simplified and Robust OpenAPI Spec for Salesforce V3
+openapi: 3.0.3
+info:
+  title: "Client Prep Agent API V3"
+  version: "3.0.0"
+
+paths:
+  /api/v1/analyze:
+    post:
+      # Explicitly naming the operation
+      operationId: analyzeCompany
+      summary: "Analyzes a company URL."
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              # Giving the input object a specific title
+              title: AnalysisRequest
+              type: object
+              required:
+                - url
+                - action
+              properties:
+                url:
+                  type: string
+                action:
+                  type: string
+      responses:
+        '200':
+          description: "Successful analysis"
+          content:
+            application/json:
+              schema:
+                # Giving the output object a specific title
+                title: AnalysisResponse
+                type: object
+                properties:
+                  result:
+                    type: string
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization

@@ -1,0 +1,13 @@
+// Duckduckgo Leadership
+digraph {
+	rankdir=TB
+	"Gabriel Weinberg
+Founder(s)" [label="Gabriel Weinberg
+Founder(s)"]
+	"Gabriel Weinberg
+CEO" [label="Gabriel Weinberg
+CEO"]
+	"Gabriel Weinberg
+Founder(s)" -> "Gabriel Weinberg
+CEO"
+}

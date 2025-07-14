@@ -1,0 +1,199 @@
+// Tata Leadership
+digraph {
+	rankdir=TB
+	"Values Community JRD Tata Jamsetji Tata Heritage
+TAGS" [label="Values Community JRD Tata Jamsetji Tata Heritage
+TAGS"]
+	"Life of JRD
+A Timeline A timeline tracing the milestones in the rich" [label="Life of JRD
+A Timeline A timeline tracing the milestones in the rich"]
+	"A Timeline A timeline tracing the milestones in the rich
+Life of JRD" [label="A Timeline A timeline tracing the milestones in the rich
+Life of JRD"]
+	"Life of JRD
+A Timeline" [label="Life of JRD
+A Timeline"]
+	"A Timeline
+Life of JRD" [label="A Timeline
+Life of JRD"]
+	"Tata Group Group Leadership Information and profiles of the Executive Chairman
+Board of Directors" [label="Tata Group Group Leadership Information and profiles of the Executive Chairman
+Board of Directors"]
+	"Information and profiles of the Executive Chairman
+Board of Directors" [label="Information and profiles of the Executive Chairman
+Board of Directors"]
+	"Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President
+Business Development and Corporate Affairs Roopa Purushothaman Chief Economist & Head of Policy Advocacy and CSR Suprakash Mukhopadhyay Company Secretary" [label="Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President
+Business Development and Corporate Affairs Roopa Purushothaman Chief Economist & Head of Policy Advocacy and CSR Suprakash Mukhopadhyay Company Secretary"]
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" [label="Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President"]
+	"Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President
+Business Development and Corporate Affairs Roopa Purushothaman Chief Economist & Head of Policy Advocacy and CSR Suprakash Mukhopadhyay Company Secretary" [label="Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President
+Business Development and Corporate Affairs Roopa Purushothaman Chief Economist & Head of Policy Advocacy and CSR Suprakash Mukhopadhyay Company Secretary"]
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" [label="Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President"]
+	"Sucharita Choudhury President
+Business Development and Corporate Affairs" [label="Sucharita Choudhury President
+Business Development and Corporate Affairs"]
+	"Business Development and Corporate Affairs
+Sucharita Choudhury President" [label="Business Development and Corporate Affairs
+Sucharita Choudhury President"]
+	"Business Development and Corporate Affairs
+President" [label="Business Development and Corporate Affairs
+President"]
+	"Suprakash Mukhopadhyay Company Secretary
+Tata Sons & Group Corporate Secretary" [label="Suprakash Mukhopadhyay Company Secretary
+Tata Sons & Group Corporate Secretary"]
+	"Company Secretary
+Tata Sons & Group Corporate Secretary" [label="Company Secretary
+Tata Sons & Group Corporate Secretary"]
+	"Committees of Board of Directors Audit Committee Ajay Piramal
+Independent Director" [label="Committees of Board of Directors Audit Committee Ajay Piramal
+Independent Director"]
+	"Audit Committee Ajay Piramal
+Independent Director" [label="Audit Committee Ajay Piramal
+Independent Director"]
+	"Ajay Piramal
+Independent Director" [label="Ajay Piramal
+Independent Director"]
+	"Venu Srinivasan
+Non" [label="Venu Srinivasan
+Non"]
+	"Anita Marangoly George
+Independent Director" [label="Anita Marangoly George
+Independent Director"]
+	"Nomination and Remuneration Committee Harish Manwani
+Independent Director" [label="Nomination and Remuneration Committee Harish Manwani
+Independent Director"]
+	"Harish Manwani
+Independent Director" [label="Harish Manwani
+Independent Director"]
+	"N Chandrasekaran
+Executive Chairman" [label="N Chandrasekaran
+Executive Chairman"]
+	"CSR and ESG Committee N Chandrasekaran
+Executive Chairman" [label="CSR and ESG Committee N Chandrasekaran
+Executive Chairman"]
+	"Vijay Singh
+Non" [label="Vijay Singh
+Non"]
+	"Group Risk Management Committee Anita Marangoly George
+Independent Director" [label="Group Risk Management Committee Anita Marangoly George
+Independent Director"]
+	"Saurabh Agrawal
+Executive Director" [label="Saurabh Agrawal
+Executive Director"]
+	"Eruch N Kapadia
+Chief Financial Officer" [label="Eruch N Kapadia
+Chief Financial Officer"]
+	"Asset Liability Management Committee Saurabh Agrawal
+Executive Director" [label="Asset Liability Management Committee Saurabh Agrawal
+Executive Director"]
+	"Suprakash Mukhopadhyay
+Company Secretary" [label="Suprakash Mukhopadhyay
+Company Secretary"]
+	"Risk Management Committee N Chandrasekaran
+Executive Chairman" [label="Risk Management Committee N Chandrasekaran
+Executive Chairman"]
+	"IT Strategy Committee Anita Marangoly George
+Independent Director" [label="IT Strategy Committee Anita Marangoly George
+Independent Director"]
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Values Community JRD Tata Jamsetji Tata Heritage
+TAGS"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Life of JRD
+A Timeline A timeline tracing the milestones in the rich"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "A Timeline A timeline tracing the milestones in the rich
+Life of JRD"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Life of JRD
+A Timeline"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "A Timeline
+Life of JRD"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Tata Group Group Leadership Information and profiles of the Executive Chairman
+Board of Directors"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Information and profiles of the Executive Chairman
+Board of Directors"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President
+Business Development and Corporate Affairs Roopa Purushothaman Chief Economist & Head of Policy Advocacy and CSR Suprakash Mukhopadhyay Company Secretary"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President
+Business Development and Corporate Affairs Roopa Purushothaman Chief Economist & Head of Policy Advocacy and CSR Suprakash Mukhopadhyay Company Secretary"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Sucharita Choudhury President
+Business Development and Corporate Affairs"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Business Development and Corporate Affairs
+Sucharita Choudhury President"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Business Development and Corporate Affairs
+President"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Suprakash Mukhopadhyay Company Secretary
+Tata Sons & Group Corporate Secretary"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Company Secretary
+Tata Sons & Group Corporate Secretary"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Committees of Board of Directors Audit Committee Ajay Piramal
+Independent Director"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Audit Committee Ajay Piramal
+Independent Director"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Ajay Piramal
+Independent Director"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Venu Srinivasan
+Non"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Anita Marangoly George
+Independent Director"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Nomination and Remuneration Committee Harish Manwani
+Independent Director"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Harish Manwani
+Independent Director"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "N Chandrasekaran
+Executive Chairman"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "CSR and ESG Committee N Chandrasekaran
+Executive Chairman"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Vijay Singh
+Non"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Group Risk Management Committee Anita Marangoly George
+Independent Director"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Saurabh Agrawal
+Executive Director"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Eruch N Kapadia
+Chief Financial Officer"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Asset Liability Management Committee Saurabh Agrawal
+Executive Director"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Suprakash Mukhopadhyay
+Company Secretary"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "Risk Management Committee N Chandrasekaran
+Executive Chairman"
+	"Business Development and Corporate Affairs Roopa Purushothaman Chief Economist
+Management Team N Chandrasekaran Executive Chairman Saurabh Agrawal Group Chief Financial Officer Ankur Verma Group Chief Strategy Officer Nupur Mallick Group Chief Human Resources Officer Sidharth Sharma General Counsel Sucharita Choudhury President" -> "IT Strategy Committee Anita Marangoly George
+Independent Director"
+}
