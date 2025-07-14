@@ -15,3 +15,5 @@ tldextract
 google-generativeai
 textblob
 googlesearch-python
+graphviz
+crawl4ai
