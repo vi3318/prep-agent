@@ -17,3 +17,4 @@ textblob
 googlesearch-python
 graphviz
 crawl4ai
+pdfplumber

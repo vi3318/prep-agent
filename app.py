@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, session, jsonify, send_from_directory
+from flask import Flask, request, redirect, session, jsonify, send_from_directory, render_template, url_for
 import os
 import re
 import requests
@@ -24,6 +24,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import pdfplumber
 from googlesearch import search
+import datetime
+try:
+    import markdown2
+    render_markdown = True
+except ImportError:
+    render_markdown = False
 
 load_dotenv()
 
@@ -84,14 +90,6 @@ def cleanup_conversation_state():
         logging.info(f"[cleanup_conversation_state] Removed {len(keys_to_remove)} old conversation states")
 
 
-@app.route("/")
-def home():
-    return '''
-        <h2>Agentforce Login</h2>
-        <a href="/login">🔑 Connect to Salesforce</a>
-    '''
-
-
 @app.route("/login")
 def login():
     return redirect(f"{AUTH_URL}?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}")
@@ -140,6 +138,278 @@ def profile():
 @app.route("/downloads/<path:filename>")
 def download_file(filename):
     return send_from_directory("downloads", filename)
+
+
+@app.route("/", methods=["GET", "POST"])
+def dashboard():
+    error = None
+    company = ""
+    action = ""
+    status = None
+    pdf_url = None
+    ppt_url = None
+    logo_url = None
+    # --- Clear all pending session keys on GET (unless just POSTed) ---
+    if request.method == "GET":
+        for key in [
+            'pending_action', 'pending_company', 'pending_status', 'pending_summary', 'show_loading', 'pending_custom_question'
+        ]:
+            session.pop(key, None)
+    if request.method == "GET":
+        session['chat_history'] = []
+        chat_history = []
+    else:
+        chat_history = session.get('chat_history', [])
+    if request.method == "POST":
+        if 'clear_chat' in request.form:
+            session['chat_history'] = []
+            chat_history = []
+            return redirect(url_for('dashboard'))
+        company = request.form.get("company") or session.get('last_company')
+        action = request.form.get("action")
+        custom_question = request.form.get("custom_question")
+        if company:
+            session['last_company'] = company
+        status = None
+        if action in ["summary", "risks", "leadership"]:
+            status = f"⏳ Summary in progress for {company}..."
+            session['pending_action'] = action
+            session['pending_company'] = company
+            session['pending_status'] = status
+            if custom_question:
+                session['pending_custom_question'] = custom_question
+            # Set a loading flag and redirect to show the loading message first
+            session['show_loading'] = True
+            return redirect(url_for('dashboard'))
+        def is_url(text):
+            return text.startswith("http://") or text.startswith("https://")
+        user_msg = None
+        agent_msg = None
+        now = datetime.datetime.now().strftime('%H:%M')
+        logo_url = None
+        pdf_url = None
+        ppt_url = None
+        # --- Show status/loading message before running crawler ---
+        if action == "summary":
+            status = f"⏳ Summary in progress for {company}..."
+            session['pending_summary'] = company
+            session['pending_status'] = status
+            return redirect(url_for('dashboard'))
+        try:
+            from advanced_crawler import run_advanced_crawler
+            from summarizer import analyze_company, generate_swot_analysis, detect_trends, detect_red_flags_and_opportunities, extract_timeline_events, answer_question
+            import markdown2
+            if action == "summary":
+                # Actually run the crawler and summarizer after showing status
+                content, err = run_advanced_crawler(company)
+                if not content:
+                    error = err or f"Could not find information for '{company}'. Please enter a valid company name or URL."
+                    return render_template("dashboard.html", chat_history=chat_history, error=error, company=company, action=action, status=None, pdf_url=None, ppt_url=None, logo_url=None, render_markdown=render_markdown)
+                company_name = company.capitalize()
+                logo_url = f'https://www.google.com/s2/favicons?domain={company_name.lower()}.com'
+                from summarizer import summarize_chunks
+                import re
+                summary = summarize_chunks(content)
+                summary = re.sub(r'\*+', '', summary).strip()  # Remove stray asterisks
+                import markdown2
+                summary_html = markdown2.markdown(summary) if render_markdown else summary.replace('\n', '<br>')
+                user_msg = {"role": "user", "text": f"Summary for {company_name}", "company": company_name, "time": now, "avatar": None}
+                agent_msg = {"role": "agent", "type": "summary", "text": summary_html, "company": company_name, "logo_url": logo_url, "time": now, "avatar": None}
+                from pdf_exporter import export_summary_to_pdf
+                from ppt_exporter import export_summary_to_ppt
+                import os
+                os.makedirs("downloads", exist_ok=True)
+                pdf_path = f"downloads/{company_name}_Summary.pdf"
+                ppt_path = f"downloads/{company_name}_Summary.pptx"
+                export_summary_to_pdf(summary, pdf_path)
+                export_summary_to_ppt(summary, ppt_path, company_name)
+                pdf_url = url_for('download_file', filename=f"{company_name}_Summary.pdf")
+                ppt_url = url_for('download_file', filename=f"{company_name}_Summary.pptx")
+                session["last_summary"] = summary
+                session["last_company"] = company_name
+                # Clear chat history for new company
+                chat_history = [user_msg, agent_msg]
+                session['chat_history'] = chat_history
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                    return render_template("chat_history.html", chat_history=chat_history, error=None, company=company, action=action, status=None, pdf_url=pdf_url, ppt_url=ppt_url, logo_url=logo_url, render_markdown=render_markdown)
+                else:
+                    return render_template("dashboard.html", chat_history=chat_history, error=None, company=company, action=action, status=None, pdf_url=pdf_url, ppt_url=ppt_url, logo_url=logo_url, render_markdown=render_markdown)
+            elif action == "leadership":
+                status = f"⏳ Fetching leadership info for {company}..."
+                from app import get_key_executives
+                user_msg = {"role": "user", "text": f"Leadership for {company}", "company": company, "time": now, "avatar": None}
+                agent_msg = {"role": "agent", "type": "leadership", "text": get_key_executives(company), "company": company, "logo_url": logo_url, "time": now, "avatar": logo_url}
+            elif action == "swot":
+                status = f"🧩 Generating SWOT analysis for {company}..."
+                swot = generate_swot_analysis(content, company)
+                swot_md = f"## SWOT Analysis for {company}\n\n" + '\n'.join([
+                    f"**{k}:**\n" + '\n'.join([f"- {item}" for item in v]) for k, v in swot.items()
+                ])
+                swot_html = markdown2.markdown(swot_md) if render_markdown else swot_md.replace('\n', '<br>')
+                user_msg = {"role": "user", "text": f"SWOT for {company}", "company": company, "time": now, "avatar": None}
+                agent_msg = {"role": "agent", "type": "swot", "text": swot_html, "company": company, "logo_url": logo_url, "time": now, "avatar": logo_url}
+            elif action == "trends":
+                status = f"📈 Generating trends for {company}..."
+                trends = analyze_company(content)["trends"]
+                trends_md = f"## Trends for {company}\n\n" + '\n'.join([f"- {t}" for t in trends])
+                trends_html = markdown2.markdown(trends_md) if render_markdown else trends_md.replace('\n', '<br>')
+                user_msg = {"role": "user", "text": f"Trends for {company}", "company": company, "time": now, "avatar": None}
+                agent_msg = {"role": "agent", "type": "trends", "text": trends_html, "company": company, "logo_url": logo_url, "time": now, "avatar": logo_url}
+            elif action == "risks_opps":
+                status = f"⚠️ Generating risks & opportunities for {company}..."
+                risks = analyze_company(content)["red_flags_opps"]
+                risks_md = f"## Risks & Opportunities for {company}\n\n" + '\n'.join([
+                    f"**{k}:**\n" + '\n'.join([f"- {item}" for item in v]) for k, v in risks.items()
+                ])
+                risks_html = markdown2.markdown(risks_md) if render_markdown else risks_md.replace('\n', '<br>')
+                user_msg = {"role": "user", "text": f"Risks & Opportunities for {company}", "company": company, "time": now, "avatar": None}
+                agent_msg = {"role": "agent", "type": "risks_opps", "text": risks_html, "company": company, "logo_url": logo_url, "time": now, "avatar": logo_url}
+            elif action == "timeline":
+                status = f"🕒 Generating timeline for {company}..."
+                timeline = analyze_company(content)["timeline_events"]
+                timeline_md = f"## Timeline for {company}\n\n" + '\n'.join([f"- {e}" for e in timeline])
+                timeline_html = markdown2.markdown(timeline_md) if render_markdown else timeline_md.replace('\n', '<br>')
+                user_msg = {"role": "user", "text": f"Timeline for {company}", "company": company, "time": now, "avatar": None}
+                agent_msg = {"role": "agent", "type": "timeline", "text": timeline_html, "company": company, "logo_url": logo_url, "time": now, "avatar": logo_url}
+            elif action == "custom_question":
+                last_summary = session.get("last_summary")
+                last_company = session.get("last_company")
+                if not last_summary or not last_company:
+                    error = "No company summary found. Please generate a summary first."
+                else:
+                    status = f"💬 Answering your question about {last_company}..."
+                    user_msg = {"role": "user", "text": custom_question, "company": last_company, "time": now, "avatar": None}
+                    answer = answer_question(last_summary, custom_question)
+                    agent_msg = {"role": "agent", "type": "answer", "text": answer, "company": last_company, "time": now, "avatar": None}
+                company = last_company or ""
+            if user_msg and agent_msg:
+                chat_history.append(user_msg)
+                chat_history.append(agent_msg)
+                session['chat_history'] = chat_history
+        except Exception as e:
+            error = f"❌ Error: {str(e)}"
+            return render_template("dashboard.html", chat_history=chat_history, error=error, company=company, action=action, status=None, pdf_url=None, ppt_url=None, logo_url=None, render_markdown=render_markdown)
+    # --- After showing status, on next GET, run the summary if pending ---
+    # On GET, handle loading state first
+    if session.pop('show_loading', False):
+        # Show the loading message only, do not run backend work yet
+        status = session.get('pending_status')
+        return render_template("dashboard.html", chat_history=session.get('chat_history', []), error=None, company=session.get('pending_company'), action=session.get('pending_action'), status=status, pdf_url=None, ppt_url=None, logo_url=None, render_markdown=render_markdown)
+    # On next GET, run the backend work
+    action = session.pop('pending_action', None)
+    company = session.pop('pending_company', None)
+    status = session.pop('pending_status', None)
+    custom_question = session.pop('pending_custom_question', None)
+    if action and company:
+        logo_url = get_company_logo_url(company)
+        if action == "summary":
+            now = datetime.datetime.now().strftime('%H:%M')
+            chat_history = session.get('chat_history', [])
+            from advanced_crawler import run_advanced_crawler
+            from summarizer import summarize_chunks
+            import re
+            content, err = run_advanced_crawler(company)
+            if not content:
+                error = err or f"Could not find information for '{company}'. Please enter a valid company name or URL."
+                return render_template("dashboard.html", chat_history=chat_history, error=error, company=company, action=action, status=None, pdf_url=None, ppt_url=None, logo_url=None, render_markdown=render_markdown)
+            company_name = company.capitalize()
+            logo_url = f'https://www.google.com/s2/favicons?domain={company_name.lower()}.com'
+            summary = summarize_chunks(content)
+            summary = re.sub(r'\*+', '', summary).strip()
+            import markdown2
+            summary_html = markdown2.markdown(summary) if render_markdown else summary.replace('\n', '<br>')
+            user_msg = {"role": "user", "text": f"Summary for {company_name}", "company": company_name, "time": now, "avatar": None}
+            agent_msg = {"role": "agent", "type": "summary", "text": summary_html, "company": company_name, "logo_url": logo_url, "time": now, "avatar": None}
+            from pdf_exporter import export_summary_to_pdf
+            from ppt_exporter import export_summary_to_ppt
+            import os
+            os.makedirs("downloads", exist_ok=True)
+            pdf_path = f"downloads/{company_name}_Summary.pdf"
+            ppt_path = f"downloads/{company_name}_Summary.pptx"
+            export_summary_to_pdf(summary, pdf_path)
+            export_summary_to_ppt(summary, ppt_path, company_name)
+            pdf_url = url_for('download_file', filename=f"{company_name}_Summary.pdf")
+            ppt_url = url_for('download_file', filename=f"{company_name}_Summary.pptx")
+            session["last_summary"] = summary
+            session["last_company"] = company_name
+            chat_history = [user_msg, agent_msg]
+            session['chat_history'] = chat_history
+            return render_template("dashboard.html", chat_history=chat_history, error=None, company=company, action=action, status=status, pdf_url=pdf_url, ppt_url=ppt_url, logo_url=logo_url, render_markdown=render_markdown)
+        elif action == "risks_opps":
+            now = datetime.datetime.now().strftime('%H:%M')
+            chat_history = session.get('chat_history', [])
+            context = get_full_company_context(request.form.get("channel_id"), request.form.get("thread_ts"), company)
+            if context:
+                fallback_context, _ = run_advanced_crawler(company)
+                risks = detect_red_flags_and_opportunities(context, company_name=company, fallback_context=fallback_context)
+                blocks = build_risks_blocks(company, risks, None) # Pass None for url as it's not a direct action
+                send_slack(request.form.get("channel_id"), blocks=blocks, thread_ts=request.form.get("thread_ts"))
+                return render_template("dashboard.html", chat_history=chat_history, error=None, company=company, action=action, status=status, pdf_url=None, ppt_url=None, logo_url=logo_url, render_markdown=render_markdown)
+            else:
+                # Fallback: Ask Gemini for generic risks & opportunities
+                risks = detect_red_flags_and_opportunities(f"{company} is a company. Please provide general risks and opportunities, even if only based on industry knowledge.", company_name=company)
+                blocks = build_risks_blocks(company, risks, None) # Pass None for url as it's not a direct action
+                send_slack(request.form.get("channel_id"), blocks=blocks, thread_ts=request.form.get("thread_ts"))
+                return render_template("dashboard.html", chat_history=chat_history, error=None, company=company, action=action, status=status, pdf_url=None, ppt_url=None, logo_url=logo_url, render_markdown=render_markdown)
+        elif action == "leadership":
+            now = datetime.datetime.now().strftime('%H:%M')
+            chat_history = session.get('chat_history', [])
+            leadership_info = get_key_executives(company)
+            send_slack(request.form.get("channel_id"), text=leadership_info, thread_ts=request.form.get("thread_ts"))
+            return render_template("dashboard.html", chat_history=chat_history, error=None, company=company, action=action, status=status, pdf_url=None, ppt_url=None, logo_url=logo_url, render_markdown=render_markdown)
+        elif action == "swot":
+            now = datetime.datetime.now().strftime('%H:%M')
+            chat_history = session.get('chat_history', [])
+            context = get_full_company_context(request.form.get("channel_id"), request.form.get("thread_ts"), company)
+            if context:
+                swot = generate_swot_analysis(context, company)
+                blocks = build_swot_blocks(company, swot, None) # Pass None for url as it's not a direct action
+                send_slack(request.form.get("channel_id"), blocks=blocks, thread_ts=request.form.get("thread_ts"))
+                return render_template("dashboard.html", chat_history=chat_history, error=None, company=company, action=action, status=status, pdf_url=None, ppt_url=None, logo_url=logo_url, render_markdown=render_markdown)
+            else:
+                # Fallback: Ask Gemini for generic SWOT
+                swot = generate_swot_analysis(f"{company} is a company. Please provide a general SWOT analysis, even if only based on industry knowledge.", company)
+                blocks = build_swot_blocks(company, swot, None) # Pass None for url as it's not a direct action
+                send_slack(request.form.get("channel_id"), blocks=blocks, thread_ts=request.form.get("thread_ts"))
+                return render_template("dashboard.html", chat_history=chat_history, error=None, company=company, action=action, status=status, pdf_url=None, ppt_url=None, logo_url=logo_url, render_markdown=render_markdown)
+        elif action == "timeline":
+            now = datetime.datetime.now().strftime('%H:%M')
+            chat_history = session.get('chat_history', [])
+            context = get_full_company_context(request.form.get("channel_id"), request.form.get("thread_ts"), company)
+            if context:
+                fallback_context, _ = run_advanced_crawler(company)
+                timeline = extract_timeline_events(context, company_name=company, fallback_context=fallback_context)
+                blocks = build_timeline_blocks(company, timeline, None) # Pass None for url as it's not a direct action
+                send_slack(request.form.get("channel_id"), blocks=blocks, thread_ts=request.form.get("thread_ts"))
+                return render_template("dashboard.html", chat_history=chat_history, error=None, company=company, action=action, status=status, pdf_url=None, ppt_url=None, logo_url=logo_url, render_markdown=render_markdown)
+            else:
+                # Fallback: Ask Gemini for generic timeline/key events
+                timeline = extract_timeline_events(f"{company} is a company. Please provide a general timeline or key events, even if only based on industry knowledge.", company_name=company)
+                blocks = build_timeline_blocks(company, timeline, None) # Pass None for url as it's not a direct action
+                send_slack(request.form.get("channel_id"), blocks=blocks, thread_ts=request.form.get("thread_ts"))
+                return render_template("dashboard.html", chat_history=chat_history, error=None, company=company, action=action, status=status, pdf_url=None, ppt_url=None, logo_url=logo_url, render_markdown=render_markdown)
+        elif action == "custom_question":
+            last_summary = session.get("last_summary")
+            last_company = session.get("last_company")
+            if not last_summary or not last_company:
+                error = "No company summary found. Please generate a summary first."
+            else:
+                status = f"💬 Answering your question about {last_company}..."
+                user_msg = {"role": "user", "text": custom_question, "company": last_company, "time": now, "avatar": None}
+                answer = answer_question(last_summary, custom_question)
+                agent_msg = {"role": "agent", "type": "answer", "text": answer, "company": last_company, "time": now, "avatar": None}
+            company = last_company or ""
+            chat_history = session.get('chat_history', [])
+            chat_history.append(user_msg)
+            chat_history.append(agent_msg)
+            session['chat_history'] = chat_history
+            return render_template("dashboard.html", chat_history=chat_history, error=None, company=company, action=action, status=status, pdf_url=None, ppt_url=None, logo_url=logo_url, render_markdown=render_markdown)
+    # After summary or any action is generated, also clear these session keys
+    for key in [
+        'pending_action', 'pending_company', 'pending_status', 'pending_summary', 'show_loading', 'pending_custom_question'
+    ]:
+        session.pop(key, None)
+    return render_template("dashboard.html", chat_history=chat_history, error=error, company=company, action=action, status=status, pdf_url=pdf_url, ppt_url=ppt_url, logo_url=logo_url, render_markdown=render_markdown)
 
 
 def is_url(text):
@@ -300,6 +570,7 @@ def slack_interactions():
             send_slack(channel_id, text=f"⏳ Fetching leadership info for {company_name}...")
             leadership_info = get_key_executives(company_name)
             send_slack(channel_id, text=leadership_info)
+            # Org chart generation and upload skipped for now
         elif action_id == "ask_custom_question":
             key = f"{channel_id}:{channel_id}"
             if key in conversation_state:
@@ -377,17 +648,6 @@ def slack_ask():
                     "text": f"{mention}*Q: {question}*\n\n{answer}"
                 }
             },
-            {
-                "type": "actions",
-                "elements": [
-                    {
-                        "type": "button",
-                        "text": {"type": "plain_text", "text": "❓ Ask Another Question"},
-                        "action_id": "ask_another_question",
-                        "value": company_data["original_url"]
-                    }
-                ]
-            }
         ]
         # Always post as a new message in the channel (never in a thread)
         send_slack(channel_id, blocks=blocks)
@@ -783,9 +1043,10 @@ def get_key_executives(company_name):
     for url in leadership_urls[1:5]:
         snippets.append(url)
     prompt = f"""
-From the following web search results, extract ONLY a bullet list of at least 8 key executives (name and title) for {company_name}. 
-Do NOT include a company summary, description, or any other information. 
-If you find fewer than 8, list as many as you can, but do not add any summary or explanation.
+From the following web search results, extract ONLY a bullet list of at least 8 key executives (name and title) for {company_name}.
+- Do NOT include a company summary, description, or any other information.
+- Output ONLY the list, in the format: Name: Title
+- If you find fewer than 8, list as many as you can, but do not add any summary or explanation.
 
 Web search results:
 {chr(10).join(snippets)}
@@ -793,8 +1054,14 @@ Web search results:
     from summarizer import summarize_chunks
     response = summarize_chunks(prompt)
     import re
-    cleaned = re.sub(r'\*\*', '', response)
-    return cleaned
+    # Only keep lines that look like 'Name: Title'
+    filtered = []
+    for line in response.split('\n'):
+        if re.match(r"^[A-Za-z .'-]+: .+", line.strip()):
+            filtered.append(line.strip())
+    if not filtered:
+        return "Could not extract leadership info. Please try again."
+    return '\n'.join(filtered)
 
 def get_leadership_text(url):
     try:
@@ -804,6 +1071,39 @@ def get_leadership_text(url):
         return '\n'.join(texts)
     except Exception:
         return ''
+
+
+def get_company_logo_url(company_name):
+    """
+    Attempts to crawl the company's website and extract the logo URL.
+    Returns an absolute or proxied logo URL, or None if not found.
+    """
+    from advanced_crawler import resolve_company_website_duckduckgo
+    try:
+        website = resolve_company_website_duckduckgo(company_name)
+        if not website:
+            return None
+        resp = requests.get(website, timeout=10, headers={
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/58.0.3029.110 Safari/537.3"
+            )
+        })
+        soup = BeautifulSoup(resp.text, "html.parser")
+        # Look for <img> tags with 'logo' in class, id, or src
+        for img in soup.find_all("img"):
+            attrs = (img.get("class", []) + [img.get("id", "")] + [img.get("src", "")])
+            if any("logo" in str(a).lower() for a in attrs):
+                src = img.get("src")
+                if src:
+                    # Make absolute URL if needed
+                    from urllib.parse import urljoin
+                    return urljoin(website, src)
+        return None
+    except Exception as e:
+        print(f"[WARN] Could not fetch logo for {company_name}: {e}")
+        return None
 
 
 def build_swot_blocks(company_name, swot, url):
